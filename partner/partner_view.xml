@@ -20,8 +20,7 @@
 						groups="salesagent_commissions.group_salesagent_user"/>
 				</field>
 				<page string="Internal Notes" position="after">
-					<page string="Salesagent Details" attrs="{'invisible': [('salesagent', '=', False)]}"
-						groups="salesagent_commissions.group_salesagent_user">
+					<page string="Salesagent Details" groups="salesagent_commissions.group_salesagent_user">
 						<separator string="Commissions" colspan="4" />
 						<field name="commission" colspan="4" nolabel="1"/>
 						<separator string="Customers" colspan="4"/>
