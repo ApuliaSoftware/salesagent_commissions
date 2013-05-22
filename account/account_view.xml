@@ -94,7 +94,6 @@
 			<field name="arch" type="xml">
 				<tree string="Commissions" colors="darkorange:payment_commission_date != False" >
 					<field name="commission_presence" invisible="1"/>
-					<field name="reconciled" invisible="1"/>
 					<field name="salesagent_id" />
 					<field name="name" />
 					<field name="price_subtotal" />
@@ -105,6 +104,7 @@
 					<field name="date_invoice" />
 					<field name="partner_id" />
 					<field name="invoice_id" />
+					<field name="reconciled"/>
 				</tree>
 			</field>
 		</record>
