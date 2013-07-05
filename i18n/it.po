@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-02 18:26+0000\n"
-"PO-Revision-Date: 2013-04-02 18:26+0000\n"
+"POT-Creation-Date: 2013-07-05 09:36+0000\n"
+"PO-Revision-Date: 2013-07-05 09:36+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -131,6 +131,11 @@ msgid "Internal Notes"
 msgstr "Note Interne"
 
 #. module: salesagent_commissions
+#: view:account.invoice:0
+msgid "Commmissions"
+msgstr "Commmissioni"
+
+#. module: salesagent_commissions
 #: view:wzd.percentage_calcolate:0
 msgid "Percentage Commission"
 msgstr "Percentuale Provvigione"
@@ -156,6 +161,13 @@ msgid "Journal Items"
 msgstr "Voci sezionale"
 
 #. module: salesagent_commissions
+#: view:account.invoice:0
+#: model:ir.actions.act_window,name:salesagent_commissions.action_invoice_salesagent_total
+#: model:ir.ui.menu,name:salesagent_commissions.menu_invoice_for_salesagent
+msgid "Invoice for Salesagent"
+msgstr "Fatture per Agente"
+
+#. module: salesagent_commissions
 #: view:res.partner:0
 msgid "Suppliers"
 msgstr "Fornitori"
@@ -169,6 +181,13 @@ msgstr "Provvigione pagata"
 #: field:account.invoice.line,payment_commission_date:0
 msgid "Payment Commission Date"
 msgstr "Data Pagamento Provvigione"
+
+#. module: salesagent_commissions
+#: code:addons/salesagent_commissions/wizard/wizard.py:62
+#: code:addons/salesagent_commissions/wizard/wizard.py:93
+#, python-format
+msgid "Select at least one line!"
+msgstr "Selezionare almeno una riga!"
 
 #. module: salesagent_commissions
 #: model:ir.model,name:salesagent_commissions.model_wzd_payment_cancellation
@@ -216,6 +235,13 @@ msgstr "wzd.percentage_calcolate"
 #: model:ir.ui.menu,name:salesagent_commissions.menu_commissions_summary
 msgid "Summary"
 msgstr "Riepilogo"
+
+#. module: salesagent_commissions
+#: code:addons/salesagent_commissions/wizard/wizard.py:62
+#: code:addons/salesagent_commissions/wizard/wizard.py:93
+#, python-format
+msgid "Invalid Operation!"
+msgstr "Operazione non valida!"
 
 #. module: salesagent_commissions
 #: field:account.invoice,paid_commission:0
