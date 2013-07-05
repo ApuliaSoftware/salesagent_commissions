@@ -27,6 +27,7 @@
 			<field name="arch" type="xml">
 				<field name="product_manager" position="after">
 					<field name="commission" />
+					<field name="no_commission" />
 				</field>
 			</field>
 		</record>

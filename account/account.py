@@ -102,6 +102,11 @@ class account_invoice_line(osv.osv):
 			else:
 				self.write(cr, uid, [line.id, ], {'commission_presence':False})
 		return res
+		
+	def product_id_change(self, cr, uid, ids, product, uom_id, qty=0, name='', type='out_invoice', partner_id=False, fposition_id=False, price_unit=False, currency_id=False, context=None, company_id=None):
+		res = super(account_invoice_line,self).product_id_change(cr, uid, ids, product, uom_id, qty, name, type, partner_id, fposition_id, price_unit, currency_id, context, company_id)
+		res['value']['no_commission'] = self.pool.get('product.product').browse(cr, uid, product).no_commission
+		return res
 
 	_columns = {
 		'reconciled' : fields.related('invoice_id', 'reconciled', type='boolean',string='Reconciled'),

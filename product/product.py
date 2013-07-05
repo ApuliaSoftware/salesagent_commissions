@@ -41,6 +41,8 @@ class product_product(osv.osv):
 	_columns = {
 		# ----- Commission for category
 		'commission' : fields.float('Commission %'),
+		# ----- No commission for this product
+		'no_commission' : fields.boolean('No Commission'),
 	}
 
 product_product()
