@@ -39,7 +39,11 @@ class Parser(report_sxw.rml_parse):
 
 	def __init__(self, cr, uid, name, context):
 		super(Parser, self).__init__(cr, uid, name, context)
+		
+		rows = self.pool.get(context['active_model']).browse(cr, uid, context['active_ids'], context=context)
+		
 		self.localcontext.update({
 			'time': time,
 			'ListSum' : self.list_sum,
+			'screen_rows': rows,
 		})
