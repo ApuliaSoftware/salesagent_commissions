@@ -21,19 +21,25 @@
 #
 ##############################################################################
 
-{
-    'name': 'SalesAgent Commission module Reports',
-    'version': '0.2',
-    'category': 'Reporting',
-    'description': """
-        [ITA] Modulo per la gestione degli agenti di vendita (Reports)
-        [ENG] Module to manage salesagent (Reports)
-        """,
-    'author': 'www.andreacometa.it',
-    'website': 'http://www.andreacometa.it',
-    'license': 'AGPL-3',
-    "active": False,
-    "installable": True,
-    "depends" : ['salesagent_commissions', 'report_aeroo', 'report_aeroo_ooo'],
-    "update_xml" : ['reports.xml',],
-}
+import time
+from datetime import datetime
+from report import report_sxw
+import locale
+from osv import fields, osv
+
+from tools.translate import translate
+
+class Parser(report_sxw.rml_parse):
+
+	def list_sum(self, lista_elementi, voce):
+		totale = 0.0
+		for elem in lista_elementi:
+			totale += elem[voce]
+		return totale
+
+	def __init__(self, cr, uid, name, context):
+		super(Parser, self).__init__(cr, uid, name, context)
+		self.localcontext.update({
+			'time': time,
+			'ListSum' : self.list_sum,
+		})
