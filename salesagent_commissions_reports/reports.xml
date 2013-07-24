@@ -204,16 +204,15 @@
 						border:1px solid #000;
 					}
 					
-					.table_data_rist {
+					.table_data_no_board {
 						width: 100%;
-						border: 1px solid #000;
+						border: 0px solid #fff;
 						margin-bottom: 13px;
 						border-collapse:collapse;
 						font-size: 12px;
-						font-weight:bold;
 					}
 					
-					.table_data_rist td {
+					.table_data_no_board td {
 						border-bottom:1px solid #000;
 					}
 					
