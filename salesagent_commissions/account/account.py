@@ -36,6 +36,17 @@ class account_invoice(osv.osv):
 			vals.update({'salesagent_id':partner.salesagent_for_customer_id.id})
 		return super(account_invoice, self).create(cr, uid, vals, context)
 
+	def _amount_untaxed_commission(self, cr, uid, ids, name, arg, context=None):
+		res = {}
+		for invoice in self.browse(cr, uid, ids, context=context):
+			tot = 0.0
+			for line in invoice.invoice_line:
+				if line.no_commission:
+					continue
+				tot += line.price_unit * (1-(line.discount or 0.0)/100.0) * line.quantity
+			res[invoice.id] = tot
+		return res
+
 	def _total_commission(self, cr, uid, ids, name, arg, context=None):
 		res = {}
 		for invoice in self.browse(cr, uid, ids, context=context):
@@ -65,6 +76,7 @@ class account_invoice(osv.osv):
 		'commission' : fields.function(_total_commission, method=True, string='Commission', type='float', store=False),
 		'paid_commission' : fields.boolean('Paid'),
 		'paid_date' : fields.date('Commission Payment Date'),
+		'amount_untaxed_commission' : fields.function(_amount_untaxed_commission, method=True, string='Amount Untaxed Commission', type='float', store=False),
 	}
 
 account_invoice()

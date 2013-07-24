@@ -26,7 +26,7 @@
 			<td>${record.date_invoice}</td>
 			<td>${record.partner_id.name}</td>
 			<td>${record.commission}</td>
-			<td>${record.amount_untaxed}</td>
+			<td>${record.amount_untaxed_commission}</td>
 		</tr>
 		<% tot_commission += record.commission %>
 		<% tot_untaxed += record.amount_untaxed %>
