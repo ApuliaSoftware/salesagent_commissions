@@ -16,11 +16,11 @@
 			<td class="centered w35">CLIENTE</td>
 			<td class="centered w10">PROVVIGIONE</td>
 		</tr>
+	<% tot = 0.0 %>
 	% for record in objects:
-		<% tot = 0.0 %>
 		<tr>
 			<td>${record.salesagent_id.name}</td>
-			<td>${record.number}</td>
+			<td>${record.number or ''}</td>
 			<td>${record.date_invoice}</td>
 			<td>${record.partner_id.name}</td>
 			<td>${record.commission}</td>
