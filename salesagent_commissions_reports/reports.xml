@@ -119,6 +119,11 @@
 						float: left;
 					}
 					
+					.w35 {
+						width: 35%;
+						float: left;
+					}
+					
 					.w50 {
 						width: 50%;
 						float: left;
@@ -232,7 +237,17 @@
             id="list"
             model="account.invoice.line"
             name="list"
-            file="salesagent_commissions/report/list.mako"
+            file="salesagent_commissions_reports/reports/list.mako"
+            string="Riepilogo"
+            webkit_header="salesagent_commissions_portrait_header"
+            report_type="webkit" />
+
+        <report
+            auto="False"
+            id="invoice_list"
+            model="account.invoice"
+            name="invoice_list"
+            file="salesagent_commissions_reports/reports/invoice_list.mako"
             string="Riepilogo"
             webkit_header="salesagent_commissions_portrait_header"
             report_type="webkit" />
