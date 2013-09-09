@@ -46,7 +46,7 @@ wzd_percentage_calcolate()
 
 
 # ---------------------------------------------------------------
-#	MANAGE THE COMMISSIONS PAYMENT
+#	MANAGE THE COMMISSIONS PAYMENT (ON INVOICE LINE)
 # ---------------------------------------------------------------
 class wzd_commissions_payment(osv.osv_memory):
 
@@ -60,12 +60,12 @@ class wzd_commissions_payment(osv.osv_memory):
 	def pagamento_provvigioni(self, cr, uid, ids, context={}):
 		if not 'active_ids' in context:
 			raise osv.except_osv(_('Invalid Operation!'), _('Select at least one line!'))
-		# ----- Seleziona l'oggetto in base al modello attivo e ne segnala il pagamento
+		# ----- Select records for active model
 		wizard_obj = self.browse(cr,uid,ids[0])
 		line_obj = self.pool.get(context['active_model'])
 		lines = line_obj.browse(cr, uid, context['active_ids'])
 		for line in lines:
-			# ----- Scrive il pagamento
+			# ----- Set Payment
 			line_obj.write(cr, uid, [line.id,], {
 				'payment_commission_date' : wizard_obj.payment_date,
 				'paid_commission' : True,
@@ -78,7 +78,43 @@ wzd_commissions_payment()
 
 
 # ---------------------------------------------------------------
-#	DELETE COMMISSIONS PAYMENT
+#	MANAGE THE COMMISSIONS PAYMENT (ON INVOICE)
+# ---------------------------------------------------------------
+class wzd_invoice_commissions_payment(osv.osv_memory):
+
+	_name = "wzd.invoice_commissions_payment"
+
+	_columns = {
+		'payment_date' : fields.date('Payment Date'),
+		'payment_commission_note' : fields.char('Notes', size=128),
+		}
+
+	def pagamento_provvigioni(self, cr, uid, ids, context={}):
+		if not 'active_ids' in context:
+			raise osv.except_osv(_('Invalid Operation!'), _('Select at least one line!'))
+		# ----- Select records for active model
+		wizard_obj = self.browse(cr,uid,ids[0])
+		invoice_obj = self.pool.get('account.invoice')
+		line_obj = self.pool.get('account.invoice.line')
+		invoices = invoice_obj.browse(cr, uid, context['active_ids'])
+		for invoice in invoices:
+			for line in invoice.invoice_line:
+				# ----- Pay only lines with commissions
+				if line.commission_presence:
+					# ----- Set Payment
+					line_obj.write(cr, uid, [line.id,], {
+						'payment_commission_date' : wizard_obj.payment_date,
+						'paid_commission' : True,
+						'paid_commission_value' : line.commission,
+						'paid_commission_percentage_value' : line.commission_percentage,
+						'payment_commission_note':wizard_obj.payment_commission_note})
+		return {'type': 'ir.actions.act_window_close'}
+
+wzd_invoice_commissions_payment()
+
+
+# ---------------------------------------------------------------
+#	DELETE COMMISSIONS PAYMENT FROM DETAILS
 # ---------------------------------------------------------------
 class wzd_payment_cancellation(osv.osv_memory):
 
@@ -105,3 +141,39 @@ class wzd_payment_cancellation(osv.osv_memory):
 		return {'type': 'ir.actions.act_window_close'}
 
 wzd_payment_cancellation()
+
+
+# ---------------------------------------------------------------
+#	DELETE COMMISSIONS PAYMENT FROM INVOICE
+# ---------------------------------------------------------------
+class wzd_invoice_payment_cancellation(osv.osv_memory):
+
+	_name = "wzd.invoice_payment_cancellation"
+
+	_columns = {
+		'note_cancellation' : fields.boolean('Delete Notes'),
+		}
+
+	def annulla_pagamento(self, cr, uid, ids, context={}):
+		if not 'active_ids' in context:
+			raise osv.except_osv(_('Invalid Operation!'), _('Select at least one line!'))
+		# ----- Seleziona l'oggetto in base al modello attivo e ne segnala il pagamento
+		wizard_obj = self.browse(cr,uid,ids[0])
+		invoice_obj = self.pool.get(context['active_model'])
+		line_ids = []
+		invoices = invoice_obj.browse(cr, uid, context['active_ids'], context)
+		for invoice in invoices:
+			for line in invoice.invoice_line:
+				if line.commission_presence:
+					line_ids.append(line.id)
+		# ----- Delete Payment
+		args = {'payment_commission_date' : False,
+			'paid_commission' : False,
+			'paid_commission_value' : 0.0,
+			'paid_commission_percentage_value':0.0}
+		if wizard_obj.note_cancellation:
+			args['payment_commission_note'] = ''
+		self.pool.get('account.invoice.line').write(cr, uid, line_ids, args)
+		return {'type': 'ir.actions.act_window_close'}
+
+wzd_invoice_payment_cancellation()

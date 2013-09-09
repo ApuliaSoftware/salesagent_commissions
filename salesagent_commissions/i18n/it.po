@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-05 09:36+0000\n"
-"PO-Revision-Date: 2013-07-05 09:36+0000\n"
+"POT-Creation-Date: 2013-09-05 16:51+0000\n"
+"PO-Revision-Date: 2013-09-05 16:51+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,14 +16,19 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: salesagent_commissions
-#: model:ir.ui.menu,name:salesagent_commissions.menu_partner_salesagent
-msgid "Salesagents"
-msgstr "Agenti"
+#: field:account.invoice.line,payment_commission_date:0
+msgid "Payment Commission Date"
+msgstr "Data Pagamento Provvigione"
 
 #. module: salesagent_commissions
 #: field:account.invoice.line,commission:0
 msgid "Provv. Total"
 msgstr "Provv. Totale"
+
+#. module: salesagent_commissions
+#: view:res.partner:0
+msgid "Suppliers"
+msgstr "Fornitori"
 
 #. module: salesagent_commissions
 #: view:wzd.percentage_calcolate:0
@@ -34,6 +39,11 @@ msgstr "Calcola"
 #: help:account.invoice.line,no_commission:0
 msgid "Indicates if the commission __ NOT__ must be calculated for this time!"
 msgstr "Indica se la provvigione __NON__ deve essere calcolata per questa volta!"
+
+#. module: salesagent_commissions
+#: model:ir.ui.menu,name:salesagent_commissions.menu_partner_salesagent
+msgid "Salesagents"
+msgstr "Agenti"
 
 #. module: salesagent_commissions
 #: view:account.invoice.line:0
@@ -65,6 +75,7 @@ msgstr "Dettagli"
 
 #. module: salesagent_commissions
 #: view:wzd.commissions_payment:0
+#: view:wzd.invoice_commissions_payment:0
 msgid "Payment date"
 msgstr "Data Pagamento"
 
@@ -86,6 +97,7 @@ msgstr "Provv. Percentuale"
 #. module: salesagent_commissions
 #: model:ir.actions.act_window,name:salesagent_commissions.act_wzd_commissions_payment_view
 #: view:wzd.commissions_payment:0
+#: view:wzd.invoice_commissions_payment:0
 msgid "Commissions Payment"
 msgstr "Pagamento Provvigione"
 
@@ -96,6 +108,7 @@ msgstr "Percentuale"
 
 #. module: salesagent_commissions
 #: field:account.invoice.line,no_commission:0
+#: field:product.product,no_commission:0
 msgid "No Commission"
 msgstr "No Provvigione"
 
@@ -131,6 +144,16 @@ msgid "Internal Notes"
 msgstr "Note Interne"
 
 #. module: salesagent_commissions
+#: model:ir.model,name:salesagent_commissions.model_wzd_invoice_commissions_payment
+msgid "wzd.invoice_commissions_payment"
+msgstr "wzd.invoice_commissions_payment"
+
+#. module: salesagent_commissions
+#: view:account.invoice:0
+msgid "Paid Commissions"
+msgstr "Commissioni Pagate"
+
+#. module: salesagent_commissions
 #: view:account.invoice:0
 msgid "Commmissions"
 msgstr "Commmissioni"
@@ -147,11 +170,13 @@ msgstr "Provvigioni"
 
 #. module: salesagent_commissions
 #: field:wzd.commissions_payment,payment_date:0
+#: field:wzd.invoice_commissions_payment,payment_date:0
 msgid "Payment Date"
 msgstr "Data Pagamento"
 
 #. module: salesagent_commissions
 #: view:wzd.commissions_payment:0
+#: view:wzd.invoice_commissions_payment:0
 msgid "Pay"
 msgstr "Paga"
 
@@ -168,23 +193,38 @@ msgid "Invoice for Salesagent"
 msgstr "Fatture per Agente"
 
 #. module: salesagent_commissions
-#: view:res.partner:0
-msgid "Suppliers"
-msgstr "Fornitori"
+#: view:wzd.commissions_payment:0
+#: field:wzd.commissions_payment,payment_commission_note:0
+#: view:wzd.invoice_commissions_payment:0
+#: field:wzd.invoice_commissions_payment,payment_commission_note:0
+msgid "Notes"
+msgstr "Note"
 
 #. module: salesagent_commissions
+#: field:account.invoice,paid_commission:0
 #: field:account.invoice.line,paid_commission_value:0
 msgid "Paid Commission"
 msgstr "Provvigione pagata"
 
 #. module: salesagent_commissions
-#: field:account.invoice.line,payment_commission_date:0
-msgid "Payment Commission Date"
-msgstr "Data Pagamento Provvigione"
+#: help:account.invoice,paid_commission:0
+msgid "If True, Indicates all commission, for this invoice, have been paid"
+msgstr "Se spuntato, indica che tutte le commissioni, per questa fattura, somno state pagate"
 
 #. module: salesagent_commissions
+#: field:account.invoice,amount_untaxed_commission:0
+msgid "Amount Untaxed Commission"
+msgstr "Commissioni Imponibile"
+
+#. module: salesagent_commissions
+#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:62
+#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:94
+#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:129
+#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:159
 #: code:addons/salesagent_commissions/wizard/wizard.py:62
-#: code:addons/salesagent_commissions/wizard/wizard.py:93
+#: code:addons/salesagent_commissions/wizard/wizard.py:94
+#: code:addons/salesagent_commissions/wizard/wizard.py:129
+#: code:addons/salesagent_commissions/wizard/wizard.py:159
 #, python-format
 msgid "Select at least one line!"
 msgstr "Selezionare almeno una riga!"
@@ -211,10 +251,9 @@ msgid "wzd.commissions_payment"
 msgstr "wzd.commissions_payment"
 
 #. module: salesagent_commissions
-#: view:wzd.commissions_payment:0
-#: field:wzd.commissions_payment,payment_commission_note:0
-msgid "Notes"
-msgstr "Note"
+#: model:ir.actions.act_window,name:salesagent_commissions.act_wzrd_invoice_commissions_payment_view
+msgid "Invoice Commissions Payment"
+msgstr "Pagamento Provvigioni Fattura"
 
 #. module: salesagent_commissions
 #: model:ir.ui.menu,name:salesagent_commissions.menu_commissions_address_book
@@ -237,14 +276,19 @@ msgid "Summary"
 msgstr "Riepilogo"
 
 #. module: salesagent_commissions
+#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:62
+#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:94
+#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:129
+#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:159
 #: code:addons/salesagent_commissions/wizard/wizard.py:62
-#: code:addons/salesagent_commissions/wizard/wizard.py:93
+#: code:addons/salesagent_commissions/wizard/wizard.py:94
+#: code:addons/salesagent_commissions/wizard/wizard.py:129
+#: code:addons/salesagent_commissions/wizard/wizard.py:159
 #, python-format
 msgid "Invalid Operation!"
 msgstr "Operazione non valida!"
 
 #. module: salesagent_commissions
-#: field:account.invoice,paid_commission:0
 #: view:account.invoice.line:0
 #: field:account.invoice.line,paid_commission:0
 msgid "Paid"
@@ -262,11 +306,17 @@ msgid "Partner"
 msgstr "Partner"
 
 #. module: salesagent_commissions
+#: model:ir.model,name:salesagent_commissions.model_wzd_invoice_payment_cancellation
+msgid "wzd.invoice_payment_cancellation"
+msgstr "wzd.invoice_payment_cancellation"
+
+#. module: salesagent_commissions
 #: view:res.partner:0
 msgid "Salesagent Details"
 msgstr "Dettagli Agente"
 
 #. module: salesagent_commissions
+#: view:wzd.invoice_payment_cancellation:0
 #: view:wzd.payment_cancellation:0
 msgid "Cancellation"
 msgstr "Annullamento"
@@ -274,10 +324,11 @@ msgstr "Annullamento"
 #. module: salesagent_commissions
 #: view:account.invoice.line:0
 msgid "Not paid"
-msgstr "Non Pagato"
+msgstr "Commissioni Non Pagate"
 
 #. module: salesagent_commissions
 #: model:ir.actions.act_window,name:salesagent_commissions.act_wzd_payment_cancellation_view
+#: view:wzd.invoice_payment_cancellation:0
 #: view:wzd.payment_cancellation:0
 msgid "Commission Payment Cancellation"
 msgstr "Annullamento Pagamento Provvigioni"
@@ -293,6 +344,7 @@ msgid "Commission Payment Date"
 msgstr "Data Pagamento Provvigioni"
 
 #. module: salesagent_commissions
+#: field:wzd.invoice_payment_cancellation,note_cancellation:0
 #: field:wzd.payment_cancellation,note_cancellation:0
 msgid "Delete Notes"
 msgstr "Elimina Note"
@@ -339,6 +391,11 @@ msgid "Product"
 msgstr "Prodotto"
 
 #. module: salesagent_commissions
+#: model:ir.actions.act_window,name:salesagent_commissions.act_invoice_wzd_payment_cancellation_view
+msgid "Invoice Commission Payment Cancellation"
+msgstr "Annulla Pagamento Provvigioni Fattura"
+
+#. module: salesagent_commissions
 #: field:account.invoice.line,commission_presence:0
 msgid "Commission Presence"
 msgstr "Presenza Provvigione"
@@ -356,6 +413,8 @@ msgstr "Relation for Partner, products and commissions"
 
 #. module: salesagent_commissions
 #: view:wzd.commissions_payment:0
+#: view:wzd.invoice_commissions_payment:0
+#: view:wzd.invoice_payment_cancellation:0
 #: view:wzd.payment_cancellation:0
 #: view:wzd.percentage_calcolate:0
 msgid "Close"

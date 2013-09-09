@@ -14,6 +14,9 @@
 				<field name='user_id' position="before">
 					<field name="salesagent_id" domain="[('salesagent', '=', 1)]"/>
 				</field>
+				<filter name="unpaid" position="after">
+					<filter name="Paid Commissions" string="Paid Commissions" domain="[('paid_commission', '=', True)]"/>
+				</filter>
 			</field>
 		</record>
 
@@ -71,9 +74,6 @@
 				<field name="account_id" position="after">
 					<field name="salesagent_id" domain="[('salesagent', '=', True)]"/>
 				</field>
-				<!--field name="user_id" position="after">
-					<field name="salesagent_id" domain="[('salesagent', '=', True)]"/>
-				</field-->
 				<xpath expr="/form/sheet/notebook/page[@string='Invoice Lines']/field[@name='invoice_line']/tree" position="attributes">
 					<attribute name="editable"></attribute>
 				</xpath>
@@ -159,12 +159,13 @@
 			<field name="model">account.invoice</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree string="Invoice for Salesagent">
+				<tree string="Invoice for Salesagent" colors="darkorange:paid_commission != False">
 					<field name="number"/>
 					<field name="date_invoice"/>
 					<field name="partner_id"/>
 					<field name="salesagent_id"/>
 					<field name="commission" sum="Commmissions"/>
+					<field name="paid_commission" />
 					<!--field name="amount_untaxed"/-->
 					<field name="amount_untaxed_commission"/>
 					<field name="amount_total"/>

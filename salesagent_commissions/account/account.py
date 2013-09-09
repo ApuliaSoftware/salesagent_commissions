@@ -62,6 +62,16 @@ class account_invoice(osv.osv):
 			res[invoice.id] = total_commission
 		return res
 
+	def _paid_commission(self, cr, uid, ids, name, arg, context=None):
+		res = {}
+		for invoice in self.browse(cr, uid, ids, context=context):
+			paid_commission = True
+			for line in invoice.invoice_line:
+				if line.commission_presence and not line.paid_commission:
+					paid_commission = False
+			res[invoice.id] = paid_commission
+		return res
+
 	def onchange_partner_id(self, cr, uid, ids, type, partner_id, date_invoice=False, payment_term=False, partner_bank_id=False, company_id=False):
 		if not partner_id:
 			return {}
@@ -74,7 +84,7 @@ class account_invoice(osv.osv):
 	_columns = {
 		'salesagent_id' : fields.many2one('res.partner', 'Salesagent'),
 		'commission' : fields.function(_total_commission, method=True, string='Commission', type='float', store=False),
-		'paid_commission' : fields.boolean('Paid'),
+		'paid_commission' : fields.function(_paid_commission, type='boolean', method=True, store=True, string="Paid Commission", help="If True, Indicates all commission, for this invoice, have been paid"),
 		'paid_date' : fields.date('Commission Payment Date'),
 		'amount_untaxed_commission' : fields.function(_amount_untaxed_commission, method=True, string='Amount Untaxed Commission', type='float', store=False),
 	}
