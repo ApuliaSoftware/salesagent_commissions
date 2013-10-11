@@ -44,7 +44,8 @@ class product_product(osv.osv):
         # ----- No commission for this product
         'no_commission' : fields.boolean('No Commission'),
         # ----- Product used as standard product for new salesagent
-        'standard_commission_product' : fields.boolean('Standard Commission'),
+        'standard_commission_product' : fields.boolean('Standard Commission',
+            help='All the products with this value set on True will be insert in the salesagent product list when you click on "Rapid Product Filling"'),
     }
 
 product_product()

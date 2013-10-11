@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-05 16:51+0000\n"
-"PO-Revision-Date: 2013-09-05 16:51+0000\n"
+"POT-Creation-Date: 2013-10-11 17:08+0000\n"
+"PO-Revision-Date: 2013-10-11 17:08+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -69,6 +69,11 @@ msgid "Commission"
 msgstr "Provvigione"
 
 #. module: salesagent_commissions
+#: model:ir.model,name:salesagent_commissions.model_wzd_invoice_payment_cancellation
+msgid "wzd.invoice_payment_cancellation"
+msgstr "wzd.invoice_payment_cancellation"
+
+#. module: salesagent_commissions
 #: view:res.partner:0
 msgid "Details"
 msgstr "Dettagli"
@@ -122,6 +127,11 @@ msgstr "Clienti"
 #: model:ir.model,name:salesagent_commissions.model_product_category
 msgid "Product Category"
 msgstr "Categoria Prodotto"
+
+#. module: salesagent_commissions
+#: field:product.product,standard_commission_product:0
+msgid "Standard Commission"
+msgstr "Prodotto Standard per Commissione"
 
 #. module: salesagent_commissions
 #: field:account.invoice.line,reconciled:0
@@ -209,12 +219,12 @@ msgstr "Provvigione pagata"
 #. module: salesagent_commissions
 #: help:account.invoice,paid_commission:0
 msgid "If True, Indicates all commission, for this invoice, have been paid"
-msgstr "Se spuntato, indica che tutte le commissioni, per questa fattura, somno state pagate"
+msgstr "Se spuntato, indica che tutte le commissioni, per questa fattura, sono state pagate"
 
 #. module: salesagent_commissions
-#: field:account.invoice,amount_untaxed_commission:0
-msgid "Amount Untaxed Commission"
-msgstr "Commissioni Imponibile"
+#: view:res.partner:0
+msgid "Rapid Product Filling"
+msgstr "Inserimento Rapido Prodotti"
 
 #. module: salesagent_commissions
 #: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:62
@@ -306,9 +316,9 @@ msgid "Partner"
 msgstr "Partner"
 
 #. module: salesagent_commissions
-#: model:ir.model,name:salesagent_commissions.model_wzd_invoice_payment_cancellation
-msgid "wzd.invoice_payment_cancellation"
-msgstr "wzd.invoice_payment_cancellation"
+#: help:product.product,standard_commission_product:0
+msgid "All the products with this value set on True will be insert in the salesagent product list when you click on \"Rapid Product Filling\""
+msgstr "Tutti i prodotti che hanno questa spunta saranno inseriti come prodotti gestiti dall'agente al click del button \"Inserimento Rapido Prodotti\""
 
 #. module: salesagent_commissions
 #: view:res.partner:0
@@ -324,7 +334,7 @@ msgstr "Annullamento"
 #. module: salesagent_commissions
 #: view:account.invoice.line:0
 msgid "Not paid"
-msgstr "Commissioni Non Pagate"
+msgstr "Non Pagato"
 
 #. module: salesagent_commissions
 #: model:ir.actions.act_window,name:salesagent_commissions.act_wzd_payment_cancellation_view
