@@ -25,24 +25,26 @@ from osv import fields, osv
 
 class product_category(osv.osv):
 
-	_inherit = "product.category"
+    _inherit = "product.category"
 
-	_columns = {
-		# ----- Commission for product
-		'commission' : fields.float('Commission %'),
-	}
+    _columns = {
+        # ----- Commission for product
+        'commission' : fields.float('Commission %'),
+    }
 
 product_category()
 
 class product_product(osv.osv):
 
-	_inherit = "product.product"
+    _inherit = "product.product"
 
-	_columns = {
-		# ----- Commission for category
-		'commission' : fields.float('Commission %'),
-		# ----- No commission for this product
-		'no_commission' : fields.boolean('No Commission'),
-	}
+    _columns = {
+        # ----- Commission for category
+        'commission' : fields.float('Commission %'),
+        # ----- No commission for this product
+        'no_commission' : fields.boolean('No Commission'),
+        # ----- Product used as standard product for new salesagent
+        'standard_commission_product' : fields.boolean('Standard Commission'),
+    }
 
 product_product()
