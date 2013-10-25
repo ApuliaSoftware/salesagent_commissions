@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-11 17:08+0000\n"
-"PO-Revision-Date: 2013-10-11 17:08+0000\n"
+"POT-Creation-Date: 2013-10-25 16:05+0000\n"
+"PO-Revision-Date: 2013-10-25 16:05+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -56,6 +56,17 @@ msgid "Paid Commission Percentage"
 msgstr "Provvigione Percentuale pagata"
 
 #. module: salesagent_commissions
+#: field:account.invoice,salesagent_id:0
+#: field:account.invoice.line,salesagent_id:0
+#: field:account.move.line,salesagent_id:0
+#: model:ir.actions.act_window,name:salesagent_commissions.action_partner_form_salesagent
+#: view:res.partner:0
+#: field:res.partner,salesagent:0
+#: field:res.partner,salesagent_for_customer_id:0
+msgid "Salesagent"
+msgstr "Agente"
+
+#. module: salesagent_commissions
 #: model:ir.actions.act_window,name:salesagent_commissions.act_wzd_percentage_calcolate_product
 #: model:ir.actions.act_window,name:salesagent_commissions.act_wzd_percentage_calcolate_sale
 #: view:wzd.percentage_calcolate:0
@@ -75,8 +86,15 @@ msgstr "wzd.invoice_payment_cancellation"
 
 #. module: salesagent_commissions
 #: view:res.partner:0
-msgid "Details"
-msgstr "Dettagli"
+msgid "Rapid Product Filling"
+msgstr "Inserimento Rapido Prodotti"
+
+#. module: salesagent_commissions
+#: model:ir.actions.act_window,name:salesagent_commissions.act_wzd_payment_cancellation_view
+#: view:wzd.invoice_payment_cancellation:0
+#: view:wzd.payment_cancellation:0
+msgid "Commission Payment Cancellation"
+msgstr "Annullamento Pagamento Provvigioni"
 
 #. module: salesagent_commissions
 #: view:wzd.commissions_payment:0
@@ -222,19 +240,20 @@ msgid "If True, Indicates all commission, for this invoice, have been paid"
 msgstr "Se spuntato, indica che tutte le commissioni, per questa fattura, sono state pagate"
 
 #. module: salesagent_commissions
-#: view:res.partner:0
-msgid "Rapid Product Filling"
-msgstr "Inserimento Rapido Prodotti"
+#: view:account.invoice:0
+#: field:account.invoice,amount_untaxed_commission:0
+msgid "Amount Untaxed Commission"
+msgstr "Imponibile Commissioni"
 
 #. module: salesagent_commissions
-#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:62
-#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:94
-#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:129
-#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:159
-#: code:addons/salesagent_commissions/wizard/wizard.py:62
-#: code:addons/salesagent_commissions/wizard/wizard.py:94
-#: code:addons/salesagent_commissions/wizard/wizard.py:129
-#: code:addons/salesagent_commissions/wizard/wizard.py:159
+#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:79
+#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:111
+#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:146
+#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:176
+#: code:addons/salesagent_commissions/wizard/wizard.py:79
+#: code:addons/salesagent_commissions/wizard/wizard.py:111
+#: code:addons/salesagent_commissions/wizard/wizard.py:146
+#: code:addons/salesagent_commissions/wizard/wizard.py:176
 #, python-format
 msgid "Select at least one line!"
 msgstr "Selezionare almeno una riga!"
@@ -245,15 +264,9 @@ msgid "wzd.payment_cancellation"
 msgstr "wzd.payment_cancellation"
 
 #. module: salesagent_commissions
-#: field:account.invoice,salesagent_id:0
-#: field:account.invoice.line,salesagent_id:0
-#: field:account.move.line,salesagent_id:0
-#: model:ir.actions.act_window,name:salesagent_commissions.action_partner_form_salesagent
 #: view:res.partner:0
-#: field:res.partner,salesagent:0
-#: field:res.partner,salesagent_for_customer_id:0
-msgid "Salesagent"
-msgstr "Agente"
+msgid "Details"
+msgstr "Dettagli"
 
 #. module: salesagent_commissions
 #: model:ir.model,name:salesagent_commissions.model_wzd_commissions_payment
@@ -286,14 +299,14 @@ msgid "Summary"
 msgstr "Riepilogo"
 
 #. module: salesagent_commissions
-#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:62
-#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:94
-#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:129
-#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:159
-#: code:addons/salesagent_commissions/wizard/wizard.py:62
-#: code:addons/salesagent_commissions/wizard/wizard.py:94
-#: code:addons/salesagent_commissions/wizard/wizard.py:129
-#: code:addons/salesagent_commissions/wizard/wizard.py:159
+#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:79
+#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:111
+#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:146
+#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:176
+#: code:addons/salesagent_commissions/wizard/wizard.py:79
+#: code:addons/salesagent_commissions/wizard/wizard.py:111
+#: code:addons/salesagent_commissions/wizard/wizard.py:146
+#: code:addons/salesagent_commissions/wizard/wizard.py:176
 #, python-format
 msgid "Invalid Operation!"
 msgstr "Operazione non valida!"
@@ -310,10 +323,11 @@ msgid "Commission for products"
 msgstr "Provvigione per prodotto"
 
 #. module: salesagent_commissions
-#: model:ir.model,name:salesagent_commissions.model_res_partner
-#: field:partner.product_commission,partner_id:0
-msgid "Partner"
-msgstr "Partner"
+#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:43
+#: code:addons/salesagent_commissions/wizard/wizard.py:43
+#, python-format
+msgid "Error"
+msgstr "Errore"
 
 #. module: salesagent_commissions
 #: help:product.product,standard_commission_product:0
@@ -335,13 +349,6 @@ msgstr "Annullamento"
 #: view:account.invoice.line:0
 msgid "Not paid"
 msgstr "Non Pagato"
-
-#. module: salesagent_commissions
-#: model:ir.actions.act_window,name:salesagent_commissions.act_wzd_payment_cancellation_view
-#: view:wzd.invoice_payment_cancellation:0
-#: view:wzd.payment_cancellation:0
-msgid "Commission Payment Cancellation"
-msgstr "Annullamento Pagamento Provvigioni"
 
 #. module: salesagent_commissions
 #: model:res.groups,name:salesagent_commissions.group_salesagent_manager
@@ -406,6 +413,13 @@ msgid "Invoice Commission Payment Cancellation"
 msgstr "Annulla Pagamento Provvigioni Fattura"
 
 #. module: salesagent_commissions
+#: code:addons/salesagent_commissions/salesagent_commissions/wizard/wizard.py:43
+#: code:addons/salesagent_commissions/wizard/wizard.py:43
+#, python-format
+msgid "Insert valid values!"
+msgstr "Inserire valori validi!"
+
+#. module: salesagent_commissions
 #: field:account.invoice.line,commission_presence:0
 msgid "Commission Presence"
 msgstr "Presenza Provvigione"
@@ -415,6 +429,12 @@ msgstr "Presenza Provvigione"
 #: model:ir.model,name:salesagent_commissions.model_account_invoice
 msgid "Invoice"
 msgstr "Fattura"
+
+#. module: salesagent_commissions
+#: model:ir.model,name:salesagent_commissions.model_res_partner
+#: field:partner.product_commission,partner_id:0
+msgid "Partner"
+msgstr "Partner"
 
 #. module: salesagent_commissions
 #: model:ir.model,name:salesagent_commissions.model_partner_product_commission
@@ -451,6 +471,11 @@ msgstr "Note Pagamento Provvigione"
 #: view:account.invoice.line:0
 msgid "Invoice Paid"
 msgstr "Fatture Pagate"
+
+#. module: salesagent_commissions
+#: view:account.invoice:0
+msgid "Amount Total"
+msgstr "Totale"
 
 #. module: salesagent_commissions
 #: model:ir.ui.menu,name:salesagent_commissions.menu_invoice_provvigioni

@@ -22,25 +22,42 @@
 ##############################################################################
 
 from osv import fields,osv
+from tools.translate import _
 
 # ---------------------------------------------------------------
 #	CALCOLATE COMISSION FROM FIX EARNING
 # ---------------------------------------------------------------
 class wzd_percentage_calcolate(osv.osv_memory):
 
-	_name = "wzd.percentage_calcolate"
+    _name = "wzd.percentage_calcolate"
 
-	_columns = {
-		'product_price' : fields.float('Product Price'),
-		'fix_commission' : fields.float('Fix Salesagent Commission'),
-		'percentage' : fields.float('Percentage'),
-		}
+    _columns = {
+        'product_price' : fields.float('Product Price'),
+        'fix_commission' : fields.float('Fix Salesagent Commission'),
+        'percentage' : fields.float('Percentage'),
+        }
 
-	def percentage_calcolate(self, cr, uid, ids, context={}):
-		wizard_obj = self.browse(cr,uid,ids[0])
-		percentage = wizard_obj.fix_commission / wizard_obj.product_price
-		self.write(cr, uid, ids, {'percentage':percentage})
-		return True
+    def percentage_calcolate(self, cr, uid, ids, context={}):
+        wizard = self.browse(cr,uid,ids[0])
+        if not wizard.fix_commission or not wizard.product_price:
+            raise osv.except_osv(_('Error'), _('Insert valid values!'))
+        percentage = wizard.fix_commission / wizard.product_price
+        self.write(cr, uid, ids, {'percentage':percentage})
+        view_id = self.pool.get('ir.ui.view').search(cr,uid,[
+            ('model','=','wzd.percentage_calcolate'),
+            ('name','=','wzd.percentage_calcolate.wizard')])
+        return {
+            'type': 'ir.actions.act_window',
+            'name': "Calculate percentage",
+            'res_model': 'wzd.percentage_calcolate',
+            'res_id': ids[0],
+            'view_type': 'form',
+            'view_mode': 'form',
+            'view_id': view_id,
+            'target': 'new',
+            'nodestroy': True,
+            'context' : context,
+            }
 
 wzd_percentage_calcolate()
 
@@ -50,29 +67,29 @@ wzd_percentage_calcolate()
 # ---------------------------------------------------------------
 class wzd_commissions_payment(osv.osv_memory):
 
-	_name = "wzd.commissions_payment"
+    _name = "wzd.commissions_payment"
 
-	_columns = {
-		'payment_date' : fields.date('Payment Date'),
-		'payment_commission_note' : fields.char('Notes', size=128),
-		}
+    _columns = {
+        'payment_date' : fields.date('Payment Date'),
+        'payment_commission_note' : fields.char('Notes', size=128),
+        }
 
-	def pagamento_provvigioni(self, cr, uid, ids, context={}):
-		if not 'active_ids' in context:
-			raise osv.except_osv(_('Invalid Operation!'), _('Select at least one line!'))
-		# ----- Select records for active model
-		wizard_obj = self.browse(cr,uid,ids[0])
-		line_obj = self.pool.get(context['active_model'])
-		lines = line_obj.browse(cr, uid, context['active_ids'])
-		for line in lines:
-			# ----- Set Payment
-			line_obj.write(cr, uid, [line.id,], {
-				'payment_commission_date' : wizard_obj.payment_date,
-				'paid_commission' : True,
-				'paid_commission_value' : line.commission,
-				'paid_commission_percentage_value' : line.commission_percentage,
-				'payment_commission_note':wizard_obj.payment_commission_note})
-		return {'type': 'ir.actions.act_window_close'}
+    def pagamento_provvigioni(self, cr, uid, ids, context={}):
+        if not 'active_ids' in context:
+            raise osv.except_osv(_('Invalid Operation!'), _('Select at least one line!'))
+        # ----- Select records for active model
+        wizard_obj = self.browse(cr,uid,ids[0])
+        line_obj = self.pool.get(context['active_model'])
+        lines = line_obj.browse(cr, uid, context['active_ids'])
+        for line in lines:
+            # ----- Set Payment
+            line_obj.write(cr, uid, [line.id,], {
+                'payment_commission_date' : wizard_obj.payment_date,
+                'paid_commission' : True,
+                'paid_commission_value' : line.commission,
+                'paid_commission_percentage_value' : line.commission_percentage,
+                'payment_commission_note':wizard_obj.payment_commission_note})
+        return {'type': 'ir.actions.act_window_close'}
 
 wzd_commissions_payment()
 
@@ -82,33 +99,33 @@ wzd_commissions_payment()
 # ---------------------------------------------------------------
 class wzd_invoice_commissions_payment(osv.osv_memory):
 
-	_name = "wzd.invoice_commissions_payment"
+    _name = "wzd.invoice_commissions_payment"
 
-	_columns = {
-		'payment_date' : fields.date('Payment Date'),
-		'payment_commission_note' : fields.char('Notes', size=128),
-		}
+    _columns = {
+        'payment_date' : fields.date('Payment Date'),
+        'payment_commission_note' : fields.char('Notes', size=128),
+        }
 
-	def pagamento_provvigioni(self, cr, uid, ids, context={}):
-		if not 'active_ids' in context:
-			raise osv.except_osv(_('Invalid Operation!'), _('Select at least one line!'))
-		# ----- Select records for active model
-		wizard_obj = self.browse(cr,uid,ids[0])
-		invoice_obj = self.pool.get('account.invoice')
-		line_obj = self.pool.get('account.invoice.line')
-		invoices = invoice_obj.browse(cr, uid, context['active_ids'])
-		for invoice in invoices:
-			for line in invoice.invoice_line:
-				# ----- Pay only lines with commissions
-				if line.commission_presence:
-					# ----- Set Payment
-					line_obj.write(cr, uid, [line.id,], {
-						'payment_commission_date' : wizard_obj.payment_date,
-						'paid_commission' : True,
-						'paid_commission_value' : line.commission,
-						'paid_commission_percentage_value' : line.commission_percentage,
-						'payment_commission_note':wizard_obj.payment_commission_note})
-		return {'type': 'ir.actions.act_window_close'}
+    def pagamento_provvigioni(self, cr, uid, ids, context={}):
+        if not 'active_ids' in context:
+            raise osv.except_osv(_('Invalid Operation!'), _('Select at least one line!'))
+        # ----- Select records for active model
+        wizard_obj = self.browse(cr,uid,ids[0])
+        invoice_obj = self.pool.get('account.invoice')
+        line_obj = self.pool.get('account.invoice.line')
+        invoices = invoice_obj.browse(cr, uid, context['active_ids'])
+        for invoice in invoices:
+            for line in invoice.invoice_line:
+                # ----- Pay only lines with commissions
+                if line.commission_presence:
+                    # ----- Set Payment
+                    line_obj.write(cr, uid, [line.id,], {
+                        'payment_commission_date' : wizard_obj.payment_date,
+                        'paid_commission' : True,
+                        'paid_commission_value' : line.commission,
+                        'paid_commission_percentage_value' : line.commission_percentage,
+                        'payment_commission_note':wizard_obj.payment_commission_note})
+        return {'type': 'ir.actions.act_window_close'}
 
 wzd_invoice_commissions_payment()
 
@@ -118,27 +135,27 @@ wzd_invoice_commissions_payment()
 # ---------------------------------------------------------------
 class wzd_payment_cancellation(osv.osv_memory):
 
-	_name = "wzd.payment_cancellation"
+    _name = "wzd.payment_cancellation"
 
-	_columns = {
-		'note_cancellation' : fields.boolean('Delete Notes'),
-		}
+    _columns = {
+        'note_cancellation' : fields.boolean('Delete Notes'),
+        }
 
-	def annulla_pagamento(self, cr, uid, ids, context={}):
-		if not 'active_ids' in context:
-			raise osv.except_osv(_('Invalid Operation!'), _('Select at least one line!'))
-		# ----- Seleziona l'oggetto in base al modello attivo e ne segnala il pagamento
-		wizard_obj = self.browse(cr,uid,ids[0])
-		line_obj = self.pool.get(context['active_model'])
-		# ----- Scrive il pagamento
-		args = {'payment_commission_date' : False,
-			'paid_commission' : False,
-			'paid_commission_value' : 0.0,
-			'paid_commission_percentage_value':0.0}
-		if wizard_obj.note_cancellation:
-			args['payment_commission_note'] = ''
-		line_obj.write(cr, uid, context['active_ids'], args)
-		return {'type': 'ir.actions.act_window_close'}
+    def annulla_pagamento(self, cr, uid, ids, context={}):
+        if not 'active_ids' in context:
+            raise osv.except_osv(_('Invalid Operation!'), _('Select at least one line!'))
+        # ----- Seleziona l'oggetto in base al modello attivo e ne segnala il pagamento
+        wizard_obj = self.browse(cr,uid,ids[0])
+        line_obj = self.pool.get(context['active_model'])
+        # ----- Scrive il pagamento
+        args = {'payment_commission_date' : False,
+            'paid_commission' : False,
+            'paid_commission_value' : 0.0,
+            'paid_commission_percentage_value':0.0}
+        if wizard_obj.note_cancellation:
+            args['payment_commission_note'] = ''
+        line_obj.write(cr, uid, context['active_ids'], args)
+        return {'type': 'ir.actions.act_window_close'}
 
 wzd_payment_cancellation()
 
@@ -148,32 +165,32 @@ wzd_payment_cancellation()
 # ---------------------------------------------------------------
 class wzd_invoice_payment_cancellation(osv.osv_memory):
 
-	_name = "wzd.invoice_payment_cancellation"
+    _name = "wzd.invoice_payment_cancellation"
 
-	_columns = {
-		'note_cancellation' : fields.boolean('Delete Notes'),
-		}
+    _columns = {
+        'note_cancellation' : fields.boolean('Delete Notes'),
+        }
 
-	def annulla_pagamento(self, cr, uid, ids, context={}):
-		if not 'active_ids' in context:
-			raise osv.except_osv(_('Invalid Operation!'), _('Select at least one line!'))
-		# ----- Seleziona l'oggetto in base al modello attivo e ne segnala il pagamento
-		wizard_obj = self.browse(cr,uid,ids[0])
-		invoice_obj = self.pool.get(context['active_model'])
-		line_ids = []
-		invoices = invoice_obj.browse(cr, uid, context['active_ids'], context)
-		for invoice in invoices:
-			for line in invoice.invoice_line:
-				if line.commission_presence:
-					line_ids.append(line.id)
-		# ----- Delete Payment
-		args = {'payment_commission_date' : False,
-			'paid_commission' : False,
-			'paid_commission_value' : 0.0,
-			'paid_commission_percentage_value':0.0}
-		if wizard_obj.note_cancellation:
-			args['payment_commission_note'] = ''
-		self.pool.get('account.invoice.line').write(cr, uid, line_ids, args)
-		return {'type': 'ir.actions.act_window_close'}
+    def annulla_pagamento(self, cr, uid, ids, context={}):
+        if not 'active_ids' in context:
+            raise osv.except_osv(_('Invalid Operation!'), _('Select at least one line!'))
+        # ----- Seleziona l'oggetto in base al modello attivo e ne segnala il pagamento
+        wizard_obj = self.browse(cr,uid,ids[0])
+        invoice_obj = self.pool.get(context['active_model'])
+        line_ids = []
+        invoices = invoice_obj.browse(cr, uid, context['active_ids'], context)
+        for invoice in invoices:
+            for line in invoice.invoice_line:
+                if line.commission_presence:
+                    line_ids.append(line.id)
+        # ----- Delete Payment
+        args = {'payment_commission_date' : False,
+            'paid_commission' : False,
+            'paid_commission_value' : 0.0,
+            'paid_commission_percentage_value':0.0}
+        if wizard_obj.note_cancellation:
+            args['payment_commission_note'] = ''
+        self.pool.get('account.invoice.line').write(cr, uid, line_ids, args)
+        return {'type': 'ir.actions.act_window_close'}
 
 wzd_invoice_payment_cancellation()
