@@ -15,7 +15,9 @@
                     <field name="salesagent_id" domain="[('salesagent', '=', 1)]"/>
                 </field>
                 <filter name="unpaid" position="after">
+                    <filter name="Paid Invoice" string="Paid Invoice" domain="[('residual', '=', 0.0)]"/>
                     <filter name="Paid Commissions" string="Paid Commissions" domain="[('paid_commission', '=', True)]"/>
+                    <filter name="Unpaid Commissions" string="Unpaid Commissions" domain="[('paid_commission', '=', False)]"/>
                 </filter>
             </field>
         </record>
@@ -187,6 +189,7 @@
             <field name="view_mode">tree,form</field>
             <field name="limit">40</field>
             <field name="view_id" ref="invoice_tree_salesagent_total"/>
+            <field name="search_view_id" ref="view_account_invoice_filter_salesagent"/>
             <field name="domain">[('salesagent_id', '!=', False)]</field>
         </record>
 
