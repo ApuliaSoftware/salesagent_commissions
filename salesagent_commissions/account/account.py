@@ -39,26 +39,26 @@ class account_invoice(osv.osv):
     def _amount_untaxed_commission(self, cr, uid, ids, name, arg, context=None):
         res = {}
         for invoice in self.browse(cr, uid, ids, context=context):
-            tot = 0.0
-            for line in invoice.invoice_line:
-                if line.no_commission:
-                    continue
-                tot += line.price_unit * (1-(line.discount or 0.0)/100.0) * line.quantity
-            res[invoice.id] = tot
-        return res
-
-    def _total_commission(self, cr, uid, ids, name, arg, context=None):
-        res = {}
-        for invoice in self.browse(cr, uid, ids, context=context):
             if invoice.type == 'out_invoice':
                 sign = 1
             elif invoice.type == 'out_refund':
                 sign = -1
             else:
                 sign = 0
+            tot = 0.0
+            for line in invoice.invoice_line:
+                if line.no_commission:
+                    continue
+                tot += line.price_unit * (1-(line.discount or 0.0)/100.0) * line.quantity
+            res[invoice.id] = tot * sign
+        return res
+
+    def _total_commission(self, cr, uid, ids, name, arg, context=None):
+        res = {}
+        for invoice in self.browse(cr, uid, ids, context=context):
             total_commission = 0.0 
             for line in invoice.invoice_line:
-                total_commission += (line.commission * sign)
+                total_commission += line.commission
             res[invoice.id] = total_commission
         return res
 
