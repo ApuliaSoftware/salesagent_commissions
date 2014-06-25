@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 7.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-25 16:05+0000\n"
-"PO-Revision-Date: 2013-10-25 16:05+0000\n"
+"POT-Creation-Date: 2014-06-25 10:21+0000\n"
+"PO-Revision-Date: 2014-06-25 10:21+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -80,14 +80,14 @@ msgid "Commission"
 msgstr "Provvigione"
 
 #. module: salesagent_commissions
-#: model:ir.model,name:salesagent_commissions.model_wzd_invoice_payment_cancellation
-msgid "wzd.invoice_payment_cancellation"
-msgstr "wzd.invoice_payment_cancellation"
-
-#. module: salesagent_commissions
 #: view:res.partner:0
 msgid "Rapid Product Filling"
 msgstr "Inserimento Rapido Prodotti"
+
+#. module: salesagent_commissions
+#: view:account.invoice:0
+msgid "Unpaid Commissions"
+msgstr "Provvigione Non Pagata"
 
 #. module: salesagent_commissions
 #: model:ir.actions.act_window,name:salesagent_commissions.act_wzd_payment_cancellation_view
@@ -106,6 +106,11 @@ msgstr "Data Pagamento"
 #: view:account.invoice.line:0
 msgid "Group by Invoice"
 msgstr "Raggruppa per fattura"
+
+#. module: salesagent_commissions
+#: model:ir.model,name:salesagent_commissions.model_wzd_invoice_commissions_payment
+msgid "wzd.invoice_commissions_payment"
+msgstr "wzd.invoice_commissions_payment"
 
 #. module: salesagent_commissions
 #: view:res.partner:0
@@ -147,11 +152,6 @@ msgid "Product Category"
 msgstr "Categoria Prodotto"
 
 #. module: salesagent_commissions
-#: field:product.product,standard_commission_product:0
-msgid "Standard Commission"
-msgstr "Prodotto Standard per Commissione"
-
-#. module: salesagent_commissions
 #: field:account.invoice.line,reconciled:0
 msgid "Reconciled"
 msgstr "Fattura Pagata"
@@ -172,9 +172,9 @@ msgid "Internal Notes"
 msgstr "Note Interne"
 
 #. module: salesagent_commissions
-#: model:ir.model,name:salesagent_commissions.model_wzd_invoice_commissions_payment
-msgid "wzd.invoice_commissions_payment"
-msgstr "wzd.invoice_commissions_payment"
+#: view:account.invoice:0
+msgid "Paid Invoice"
+msgstr "Pagate"
 
 #. module: salesagent_commissions
 #: view:account.invoice:0
@@ -330,9 +330,9 @@ msgid "Error"
 msgstr "Errore"
 
 #. module: salesagent_commissions
-#: help:product.product,standard_commission_product:0
-msgid "All the products with this value set on True will be insert in the salesagent product list when you click on \"Rapid Product Filling\""
-msgstr "Tutti i prodotti che hanno questa spunta saranno inseriti come prodotti gestiti dall'agente al click del button \"Inserimento Rapido Prodotti\""
+#: model:ir.model,name:salesagent_commissions.model_wzd_invoice_payment_cancellation
+msgid "wzd.invoice_payment_cancellation"
+msgstr "wzd.invoice_payment_cancellation"
 
 #. module: salesagent_commissions
 #: view:res.partner:0
