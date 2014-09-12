@@ -11,9 +11,9 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-                <field name="customer" position="after">
+                <xpath expr="/form/sheet/notebook/page[@string='Sales &amp; Purchases']/group/group/field[@name='customer']" position="after">
                     <field name="salesagent" groups="salesagent_commissions.group_salesagent_user"/>
-                </field>
+                </xpath>
                 <field name="user_id" position="after">
                     <field name="salesagent_for_customer_id" domain="[('salesagent', '=', True)]" 
                         attrs="{'invisible':[('customer', '=', False)]}"
