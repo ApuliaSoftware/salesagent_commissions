@@ -21,7 +21,9 @@
 #
 ##############################################################################
 
+
 from osv import fields, osv
+
 
 class res_partner(osv.osv):
 
@@ -35,7 +37,21 @@ class res_partner(osv.osv):
         products = product_obj.browse(cr, uid, product_ids)
         for id in ids:
             for product in products:
-                self.pool.get('partner.product_commission').create(cr, uid, {'partner_id':id,'name':product.id})
+                self.pool.get('partner.product_commission').create(
+                    cr, uid, {'partner_id':id, 'name':product.id})
+        return True
+
+    def fill_categories(self, cr, uid, ids, context=None):
+        category_obj = self.pool.get('product.category')
+        category_ids = category_obj.search(
+            cr, uid, [('standard_commission_category', '=', True)])
+        if not category_ids:
+            return True
+        categories = category_obj.browse(cr, uid, category_ids)
+        for id in ids:
+            for category in categories:
+                self.pool.get('partner.category_commission').create(cr, uid,
+                    {'partner_id':id, 'name':category.id})
         return True
 
     _columns = {
@@ -47,9 +63,11 @@ class res_partner(osv.osv):
         # ----- General commission for salesagent
         'commission' : fields.float('Commission %'),
         'product_provvigioni_ids' : fields.one2many('partner.product_commission', 'partner_id', 'Commission for products'),
+        'category_provvigioni_ids' : fields.one2many('partner.category_commission', 'partner_id', 'Commission for categories'),
     }
 
 res_partner()
+
 
 class partner_product_commission(osv.osv):
 
@@ -58,6 +76,20 @@ class partner_product_commission(osv.osv):
 
     _columns = {
         'name' : fields.many2one('product.product', 'Product'),
+        'commission' : fields.float('Commission'),
+        'partner_id' : fields.many2one('res.partner', 'Partner'),
+        }
+
+partner_product_commission()
+
+
+class partner_category_commission(osv.osv):
+
+    _name = "partner.category_commission"
+    _description = "Relation for Partner, product categories and commissions"
+
+    _columns = {
+        'name' : fields.many2one('product.category', 'Category'),
         'commission' : fields.float('Commission'),
         'partner_id' : fields.many2one('res.partner', 'Partner'),
         }

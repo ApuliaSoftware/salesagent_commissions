@@ -35,6 +35,15 @@
                             </tree>
                         </field>
                     </page>
+                    <page string="Commissions for category" groups="salesagent_commissions.group_salesagent_user">
+                        <button string="Rapid Category Filling" name="fill_categories" type="object" icon="gtk-ok"  colspan="4"/>
+                        <field name="category_provvigioni_ids" colspan="4" nolabel="1">
+                            <tree string="Details" editable="top">
+                                <field name="name"/>
+                                <field name="commission"/>
+                            </tree>
+                        </field>
+                    </page>
                 </page>
             </field>
         </record>

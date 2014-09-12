@@ -30,7 +30,7 @@ class account_invoice(osv.osv):
     _inherit = "account.invoice"
 
     def create(self, cr, uid, vals, context=None):
-        # QUI DOVRA RICHIAMARE L'AGENTE PARTENDO DAL CLIENTE
+        # ----- get salesagent from customer
         partner = self.pool.get('res.partner').browse(cr, uid, vals['partner_id'], context)
         if partner.salesagent_for_customer_id:
             vals.update({'salesagent_id':partner.salesagent_for_customer_id.id})

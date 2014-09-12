@@ -32,33 +32,71 @@ class salesagent_common(osv.osv):
     # ----- Return the right commission percentuage
     def recognized_commission(self, cr, uid, customer_id, salesagent_id,
                               product_id, context=None):
-        # If the salesagent field in the order is empty, exit
+        # ------ Commissions will be searched in this order:
+        #       - commission for product for customer
+        #       - commission for product for salesagent
+        #       - commission for category for customer
+        #       - commission for category for salesagent
+        #       - commission for product
+        #       - commission for customer
+        #       - commission for salesagent
+        # ----- If the salesagent field in the order is empty, exit
         commission = 0.0
         if not customer_id or not salesagent_id or not product_id:
             return commission
-        partner_product_commission_obj = self.pool.get('partner.product_commission')
-        # If customer has a special commission for the product
-        lst_commission_product_customer = partner_product_commission_obj.search(cr, uid,
+        partner_product_commission_obj = self.pool.get(
+            'partner.product_commission')
+        partner_category_commission_obj = self.pool.get(
+            'partner.category_commission')
+        # ----- If customer has a special commission for the product
+        lst_commission_product_customer = partner_product_commission_obj.search(
+            cr, uid,
             [('name', '=', product_id), ('partner_id', '=', customer_id)])
         if lst_commission_product_customer:
-            commission = partner_product_commission_obj.browse(cr, uid, lst_commission_product_customer[0]).commission
+            commission = partner_product_commission_obj.browse(
+                cr, uid, lst_commission_product_customer[0]).commission
             return commission
-        # If customer has a special generic commission
-        commission = self.pool.get('res.partner').browse(cr, uid, customer_id).commission
-        if commission > 0.0:
-            return commission
-        # If salesagent has a special commission for the product
-        lst_commission_product_customer = partner_product_commission_obj.search(cr, uid,
+        # ----- If salesagent has a special commission for the product
+        lst_commission_product_customer = partner_product_commission_obj.search(
+            cr, uid,
             [('name', '=', product_id), ('partner_id', '=', salesagent_id)])
         if lst_commission_product_customer:
-            commission = partner_product_commission_obj.browse(cr, uid, lst_commission_product_customer[0]).commission
+            commission = partner_product_commission_obj.browse(
+                cr, uid, lst_commission_product_customer[0]).commission
             return commission
-        # If product has a special generic commission
-        commission = self.pool.get('product.product').browse(cr, uid, product_id).commission
+        # ----- If salesagent has a special commission for the category
+        category_id = self.pool.get('product.product').browse(
+            cr, uid, product_id).categ_id.id
+        lst_commission_category_agent = partner_category_commission_obj.search(
+            cr, uid,
+            [('name', '=', category_id), ('partner_id', '=', salesagent_id)])
+        if lst_commission_category_agent:
+            commission = partner_category_commission_obj.browse(
+                cr, uid, lst_commission_category_agent[0]).commission
+            return commission
+        # ----- If customer has a special commission for the category
+        category_id = self.pool.get('product.product').browse(
+            cr, uid, product_id).categ_id.id
+        lst_commission_category_customer = partner_category_commission_obj.search(
+            cr, uid,
+            [('name', '=', category_id), ('partner_id', '=', customer_id)])
+        if lst_commission_category_customer:
+            commission = partner_category_commission_obj.browse(
+                cr, uid, lst_commission_category_customer[0]).commission
+            return commission
+        # ----- If product has a special generic commission
+        commission = self.pool.get('product.product').browse(
+            cr, uid, product_id).commission
         if commission:
             return commission
-        # If salesagent has a special generic commission
-        commission = self.pool.get('res.partner').browse(cr, uid, salesagent_id).commission
+        # ----- If customer has a special generic commission
+        commission = self.pool.get('res.partner').browse(cr, uid,
+                                                         customer_id).commission
+        if commission > 0.0:
+            return commission
+        # ----- If salesagent has a special generic commission
+        commission = self.pool.get('res.partner').browse(
+            cr, uid, salesagent_id).commission
         return commission
 
     # ----- Calcola la provvigione totale da riconoscere all'agente

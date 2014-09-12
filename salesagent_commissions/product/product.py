@@ -21,7 +21,9 @@
 #
 ##############################################################################
 
+
 from osv import fields, osv
+
 
 class product_category(osv.osv):
 
@@ -30,9 +32,13 @@ class product_category(osv.osv):
     _columns = {
         # ----- Commission for product
         'commission' : fields.float('Commission %'),
+        # ----- Category used as standard category for new salesagent
+        'standard_commission_category' : fields.boolean('Standard Commission',
+            help='All the categories with this value set on True will be insert in the salesagent category list when you click on "Rapid Category Filling"'),
     }
 
 product_category()
+
 
 class product_product(osv.osv):
 
