@@ -72,19 +72,52 @@ class account_invoice(osv.osv):
             res[invoice.id] = paid_commission
         return res
 
-    def onchange_partner_id(self, cr, uid, ids, type, partner_id, date_invoice=False, payment_term=False, partner_bank_id=False, company_id=False):
+    def _get_commission(self, cr, uid, ids, context=None):
+        result = {}
+        for line in self.pool['account.invoice.line'].browse(
+                cr, uid, ids, context=context):
+            if line.invoice_id:
+                result[line.invoice_id.id] = True
+        return result.keys()
+
+    def _get_paid_commission(self, cr, uid, ids, context=None):
+        result = {}
+        for line in self.pool['account.invoice.line'].browse(
+                cr, uid, ids, context=context):
+            if line.invoice_id:
+                result[line.invoice_id.id] = True
+        return result.keys()
+
+    def onchange_partner_id(self, cr, uid, ids, type, partner_id,
+                            date_invoice=False, payment_term=False,
+                            partner_bank_id=False, company_id=False):
         if not partner_id:
             return {}
-        partner = self.pool.get('res.partner').read(cr, uid, partner_id, ['salesagent_for_customer_id'])
+        partner = self.pool['res.partner'].read(
+            cr, uid, partner_id, ['salesagent_for_customer_id'])
         salesagent_id = partner['salesagent_for_customer_id']
-        res = super(account_invoice, self).onchange_partner_id(cr, uid, ids, type, partner_id, date_invoice, payment_term, partner_bank_id, company_id)
+        res = super(account_invoice, self).onchange_partner_id(
+            cr, uid, ids, type, partner_id, date_invoice, payment_term,
+            partner_bank_id, company_id)
         res['value']['salesagent_id'] = salesagent_id
         return res
 
     _columns = {
-        'salesagent_id' : fields.many2one('res.partner', 'Salesagent'),
-        'commission' : fields.function(_total_commission, method=True, string='Commission', type='float', store=False),
-        'paid_commission' : fields.function(_paid_commission, type='boolean', method=True, store=False, string="Paid Commission", help="If True, Indicates all commission, for this invoice, have been paid"),
+        'salesagent_id': fields.many2one('res.partner', 'Salesagent'),
+        'commission': fields.function(
+            _total_commission, method=True, string='Commission', type='float',
+            store={'account.invoice.line': (
+                    _get_commission, ['commission'], 20),
+            }),
+        'paid_commission': fields.function(
+            _paid_commission, type='boolean', method=True,
+            string="Paid Commission",
+            help="""
+            If True, Indicates all commission, for this invoice, have been paid
+            """,
+            store={'account.invoice.line': (
+                    _get_paid_commission, ['paid_commission'], 20),
+            }),
         'paid_date' : fields.date('Commission Payment Date'),
         'amount_untaxed_commission' : fields.function(_amount_untaxed_commission, method=True, string='Amount Untaxed Commission', type='float', store=False),
     }
