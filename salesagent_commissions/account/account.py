@@ -107,7 +107,9 @@ class account_invoice(osv.osv):
         'commission': fields.function(
             _total_commission, method=True, string='Commission', type='float',
             store={'account.invoice.line': (
-                    _get_commission, ['commission'], 20),
+                    _get_commission, [
+                        'product_id', 'price_unit', 'quantity', 'discount'],
+                    20),
             }),
         'paid_commission': fields.function(
             _paid_commission, type='boolean', method=True,
@@ -131,7 +133,7 @@ class account_invoice_line(osv.osv):
 
     def _commission(self, cr, uid, ids, name, arg, context=None):
         res = {}
-        salesagent_common_obj = self.pool.get('salesagent.common')
+        salesagent_common_obj = self.pool['salesagent.common']
         for line in self.browse(cr, uid, ids, context=context):
             if line.invoice_id.type == 'out_invoice':
                 sign = 1
@@ -139,7 +141,7 @@ class account_invoice_line(osv.osv):
                 sign = -1
             else:
                 sign = 0
-            res[line.id] = {'commission':0.0, 'commission_percentage':0.0}
+            res[line.id] = {'commission': 0.0, 'commission_percentage': 0.0}
             if not line.no_commission:
                 # ----- if a paid commission exist, show it or calculate it
                 if line.paid_commission_value:
@@ -151,11 +153,11 @@ class account_invoice_line(osv.osv):
                 res[line.id]['commission'] = comm
                 res[line.id]['commission_percentage'] = comm_percentage
                 if comm != 0:
-                    self.write(cr, uid, [line.id, ], {'commission_presence':True})
+                    self.write(cr, uid, [line.id, ], {'commission_presence': True})
                 else:
-                    self.write(cr, uid, [line.id, ], {'commission_presence':False})
+                    self.write(cr, uid, [line.id, ], {'commission_presence': False})
             else:
-                self.write(cr, uid, [line.id, ], {'commission_presence':False})
+                self.write(cr, uid, [line.id, ], {'commission_presence': False})
         return res
         
     def product_id_change(self, cr, uid, ids, product, uom_id, qty=0, name='', type='out_invoice', partner_id=False, fposition_id=False, price_unit=False, currency_id=False, context=None, company_id=None):
@@ -167,21 +169,26 @@ class account_invoice_line(osv.osv):
         return res
 
     _columns = {
-        'reconciled' : fields.related('invoice_id', 'reconciled', type='boolean',string='Reconciled'),
-        'no_commission' : fields.boolean('No Commission', help='Indicates if the commission __ NOT__ must be calculated for this time!'),
-        'commission_presence' : fields.boolean('Commission Presence'),
-        'commission_percentage' : fields.function(_commission, method=True, string='Comm. Percentage', type='float', store=False, multi='comm'),
-        'commission' : fields.function(_commission, method=True, string='Provv. Total', type='float', store=False, multi='comm'),
-        'salesagent_id' : fields.related('invoice_id', 'salesagent_id', type='many2one', relation='res.partner', string='Salesagent',
+        'reconciled': fields.related('invoice_id', 'reconciled', type='boolean',string='Reconciled'),
+        'no_commission': fields.boolean('No Commission', help='Indicates if the commission __ NOT__ must be calculated for this time!'),
+        'commission_presence': fields.boolean('Commission Presence'),
+        'commission_percentage': fields.function(_commission, method=True, string='Comm. Percentage', type='float', store=False, multi='comm'),
+        'commission': fields.function(
+            _commission, method=True, string='Provv. Total', type='float',
+            store={'account.invoice.line': (
+                lambda self, cr, uid, ids, ctx={}: ids, [
+                    'product_id', 'price_unit', 'quantity', 'discount'], 10),
+            }, multi='comm'),
+        'salesagent_id': fields.related('invoice_id', 'salesagent_id', type='many2one', relation='res.partner', string='Salesagent',
             store=False),
-        'partner_id' : fields.related('invoice_id', 'partner_id', type='many2one', relation='res.partner', string='Customer', store=True),
-        'date_invoice' : fields.related('invoice_id', 'date_invoice', type='date', string='Invoice Date',
+        'partner_id': fields.related('invoice_id', 'partner_id', type='many2one', relation='res.partner', string='Customer', store=True),
+        'date_invoice': fields.related('invoice_id', 'date_invoice', type='date', string='Invoice Date',
             store=False),
-        'paid_commission_value' : fields.float('Paid Commission'),
-        'paid_commission_percentage_value' : fields.float('Paid Commission Percentage'),
-        'paid_commission' : fields.boolean('Paid'),
-        'payment_commission_date' : fields.date('Payment Commission Date'),
-        'payment_commission_note' : fields.char('Payment Commission Note', size=128),
+        'paid_commission_value': fields.float('Paid Commission'),
+        'paid_commission_percentage_value': fields.float('Paid Commission Percentage'),
+        'paid_commission': fields.boolean('Paid'),
+        'payment_commission_date': fields.date('Payment Commission Date'),
+        'payment_commission_note': fields.char('Payment Commission Note', size=128),
     }
 
     _defaults = {
