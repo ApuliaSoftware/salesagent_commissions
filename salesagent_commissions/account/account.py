@@ -159,7 +159,34 @@ class account_invoice_line(osv.osv):
             else:
                 self.write(cr, uid, [line.id, ], {'commission_presence': False})
         return res
-        
+
+    def commission_scheduler(self, cr, uid, automatic=False,
+                             use_new_cursor=False, context=None):
+        '''
+            Calc empty commissions through scheduler.
+        '''
+        if context is None:
+            context = {}
+        salesagent_common_obj = self.pool['salesagent.common']
+        # we get all invoice_line with commission = 0
+        ail_ids = self.search([('no_commission', '=', False),
+                               ('commission', '=', 0)])
+        ail = self.browse(ail_ids)
+        # now recalculate
+        for line in ail:
+            if line.invoice_id.type == 'out_invoice':
+                sign = 1
+            elif line.invoice_id.type == 'out_refund':
+                sign = -1
+            else:
+                sign = 0
+            comm = sign * salesagent_common_obj.commission_calculate(
+                cr, uid, 'account.invoice.line', line.id)
+            self.write(cr, uid, [line.id, ], {
+                'commission_presence': True,
+                'commission': comm,
+            })
+
     def product_id_change(self, cr, uid, ids, product, uom_id, qty=0, name='', type='out_invoice', partner_id=False, fposition_id=False, price_unit=False, currency_id=False, context=None, company_id=None):
         res = super(account_invoice_line,self).product_id_change(cr, uid, ids, product, uom_id, qty, name, type, partner_id, fposition_id, price_unit, currency_id, context, company_id)
         if product:
