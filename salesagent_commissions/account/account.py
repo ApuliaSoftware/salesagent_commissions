@@ -23,7 +23,7 @@
 
 from osv import fields, osv
 import time
-
+import logging
 
 class account_invoice(osv.osv):
 
@@ -165,6 +165,8 @@ class account_invoice_line(osv.osv):
         '''
             Calc empty commissions through scheduler.
         '''
+        _logger = logging.getLogger(__name__)
+        self._logger.info("Commissions recalc started")
         if context is None:
             context = {}
         salesagent_common_obj = self.pool['salesagent.common']
@@ -186,6 +188,7 @@ class account_invoice_line(osv.osv):
                 'commission_presence': True,
                 'commission': comm,
             })
+        self._logger.debug("Commissions recalc finish")
 
     def product_id_change(self, cr, uid, ids, product, uom_id, qty=0, name='', type='out_invoice', partner_id=False, fposition_id=False, price_unit=False, currency_id=False, context=None, company_id=None):
         res = super(account_invoice_line,self).product_id_change(cr, uid, ids, product, uom_id, qty, name, type, partner_id, fposition_id, price_unit, currency_id, context, company_id)
