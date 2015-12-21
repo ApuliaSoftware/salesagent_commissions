@@ -1,8 +1,8 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (c) 2012 Andrea Cometa All Rights Reserved.
+#    Copyright (c) 2014 Andrea Cometa All Rights Reserved.
 #                       www.andreacometa.it
 #                       openerp@andreacometa.it
 #
@@ -21,9 +21,4 @@
 #
 ##############################################################################
 
-from . import salesagent
-from . import partner
-from . import product
-from . import account
-from . import wizard
 from . import sale

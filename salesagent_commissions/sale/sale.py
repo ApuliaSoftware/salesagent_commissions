@@ -1,8 +1,8 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (c) 2012 Andrea Cometa All Rights Reserved.
+#    Copyright (c) 2014 Andrea Cometa All Rights Reserved.
 #                       www.andreacometa.it
 #                       openerp@andreacometa.it
 #
@@ -21,9 +21,20 @@
 #
 ##############################################################################
 
-from . import salesagent
-from . import partner
-from . import product
-from . import account
-from . import wizard
-from . import sale
+from openerp.osv import fields, orm
+
+
+class SaleOrderLine(orm.Model):
+
+    _inherit = 'sale.order.line'
+
+    def _prepare_order_line_invoice_line(self, cr, uid, line, account_id=False,
+                                         context=None):
+        # hook
+        context.update({
+            'invoice_type': 'out_invoice',
+            'salesagent_id': line.order_id.partner_id.salesagent_for_customer_id.id,
+            'partner_id': line.order_id.partner_id.id,
+        })
+        return super(SaleOrderLine, self)._prepare_order_line_invoice_line(
+            cr, uid, line, account_id=False, context=None)

@@ -134,10 +134,15 @@ class account_invoice_line(osv.osv):
     def _commission(self, cr, uid, ids, name, arg, context=None):
         res = {}
         salesagent_common_obj = self.pool['salesagent.common']
+        print context
         for line in self.browse(cr, uid, ids, context=context):
-            if line.invoice_id.type == 'out_invoice':
+            if line.invoice_id:
+                invoice_type = line.invoice_id.type
+            else:
+                invoice_type = context.get('invoice_type', False)
+            if invoice_type == 'out_invoice':
                 sign = 1
-            elif line.invoice_id.type == 'out_refund':
+            elif invoice_type == 'out_refund':
                 sign = -1
             else:
                 sign = 0
@@ -148,8 +153,12 @@ class account_invoice_line(osv.osv):
                     comm = line.paid_commission_value
                     comm_percentage = line.paid_commission_percentage_value
                 else:
-                    comm = sign * salesagent_common_obj.commission_calculate(cr, uid, 'account.invoice.line', line.id)
-                    comm_percentage = salesagent_common_obj.recognized_commission(cr, uid, line.partner_id and line.partner_id.id or False, line.salesagent_id and line.salesagent_id.id or False, line.product_id and line.product_id.id or False)
+                    comm = sign * salesagent_common_obj.commission_calculate(
+                        cr, uid, 'account.invoice.line', line.id, context)
+                    comm_percentage = salesagent_common_obj.recognized_commission(
+                        cr, uid, line.partner_id and line.partner_id.id or False,
+                        line.salesagent_id and line.salesagent_id.id or False,
+                        line.product_id and line.product_id.id or False)
                 res[line.id]['commission'] = comm
                 res[line.id]['commission_percentage'] = comm_percentage
                 if comm != 0:
@@ -207,7 +216,8 @@ class account_invoice_line(osv.osv):
             _commission, method=True, string='Provv. Total', type='float',
             store={'account.invoice.line': (
                 lambda self, cr, uid, ids, ctx={}: ids, [
-                    'product_id', 'price_unit', 'quantity', 'discount'], 10),
+                    'product_id', 'price_unit', 'quantity', 'discount',
+                    'no_commission'], 10),
             }, multi='comm'),
         'salesagent_id': fields.related('invoice_id', 'salesagent_id', type='many2one', relation='res.partner', string='Salesagent',
             store=False),

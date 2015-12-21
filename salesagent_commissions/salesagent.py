@@ -108,13 +108,20 @@ class salesagent_common(osv.osv):
         class_brows = self.pool.get(param_class).browse(cr, uid, id, context)
         total_commission = 0.0
         if param_class == 'account.invoice.line':
-            salesagent = class_brows.invoice_id.salesagent_id or False
-            customer = class_brows.invoice_id.partner_id
+            salesagent_id = (
+                class_brows.invoice_id and
+                class_brows.invoice_id.salesagent_id and
+                class_brows.invoice_id.salesagent_id.id or
+                context.get('salesagent_id', False))
+            customer_id = (
+                class_brows.invoice_id and
+                class_brows.invoice_id.partner_id and
+                class_brows.invoice_id.partner_id.id or
+                context.get('partner_id', False))
             product = class_brows.product_id or False
             total_price = class_brows.price_subtotal
         percentage_commission = self.recognized_commission(
-            cr, uid, customer and customer.id or False,
-            salesagent and salesagent.id or False,
+            cr, uid, customer_id, salesagent_id,
             product and product.id or False,
             context=context)
         if percentage_commission:

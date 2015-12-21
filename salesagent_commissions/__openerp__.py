@@ -34,7 +34,7 @@
     'license': 'AGPL-3',
     "active": False,
     "installable": True,
-    "depends" : ['base', 'product', 'account'],
+    "depends" : ['base', 'product', 'account', 'sale'],
     "update_xml" : [
         'security/security.xml',
         'security/ir.model.access.csv',
