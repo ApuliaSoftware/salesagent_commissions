@@ -173,6 +173,7 @@ class account_invoice_line(osv.osv):
                              use_new_cursor=False, context=None):
         '''
             Calc empty commissions through scheduler.
+            NON SENSE
         '''
         _logger = logging.getLogger(__name__)
         self._logger.info("Commissions recalc started")

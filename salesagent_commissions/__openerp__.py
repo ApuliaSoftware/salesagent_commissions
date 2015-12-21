@@ -43,6 +43,6 @@
         'product/product_view.xml',
         'account/account_view.xml',
         'wizard/wizard_view.xml',
-        'cron.xml'
+        #'cron.xml'
         ],
 }
