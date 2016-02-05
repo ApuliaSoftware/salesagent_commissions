@@ -31,7 +31,8 @@ class res_partner(osv.osv):
 
     def fill_products(self, cr, uid, ids, context=None):
         product_obj = self.pool.get('product.product')
-        product_ids = product_obj.search(cr, uid, [('standard_commission_product', '=', True)])
+        product_ids = product_obj.search(
+            cr, uid, [('standard_commission_product', '=', True)])
         if not product_ids:
             return True
         products = product_obj.browse(cr, uid, product_ids)
@@ -55,15 +56,30 @@ class res_partner(osv.osv):
         return True
 
     _columns = {
-        'salesagent' : fields.boolean("Salesagent"),
+        'salesagent': fields.boolean("Salesagent"),
         # ----- Relation with customers
-        'customer_for_salesagent_ids' : fields.one2many('res.partner', 'salesagent_for_customer_id', 'Customers', readonly=True),
+        'customer_for_salesagent_ids': fields.one2many(
+            'res.partner', 'salesagent_for_customer_id', 'Customers',
+            readonly=True),
         # ----- Relation with salesagent
-        'salesagent_for_customer_id': fields.many2one('res.partner', 'Salesagent'),
+        'salesagent_for_customer_id': fields.many2one(
+            'res.partner', 'Salesagent'),
         # ----- General commission for salesagent
         'commission' : fields.float('Commission %'),
-        'product_provvigioni_ids' : fields.one2many('partner.product_commission', 'partner_id', 'Commission for products'),
-        'category_provvigioni_ids' : fields.one2many('partner.category_commission', 'partner_id', 'Commission for categories'),
+        'product_provvigioni_ids': fields.one2many(
+            'partner.product_commission', 'partner_id',
+            'Commission for products'),
+        'category_provvigioni_ids': fields.one2many(
+            'partner.category_commission', 'partner_id',
+            'Commission for categories'),
+        # ----- Relation with salesagent parent
+        'salesagent_parent_id': fields.many2one(
+            'res.partner', 'Salesagent parent',
+            domain="[('salesagent', '=', True)]"),
+        'parent_commission' : fields.float('Parent Commission %'),
+        #'salesagent_parent_ids': fields.one2many(
+        #    'res.partner', 'salesagent_parent_id',
+        #    'Sub salesagents'),
     }
 
 res_partner()
@@ -75,9 +91,9 @@ class partner_product_commission(osv.osv):
     _description = "Relation for Partner, products and commissions"
 
     _columns = {
-        'name' : fields.many2one('product.product', 'Product'),
-        'commission' : fields.float('Commission'),
-        'partner_id' : fields.many2one('res.partner', 'Partner'),
+        'name': fields.many2one('product.product', 'Product'),
+        'commission': fields.float('Commission'),
+        'partner_id': fields.many2one('res.partner', 'Partner'),
         }
 
 partner_product_commission()
@@ -89,9 +105,9 @@ class partner_category_commission(osv.osv):
     _description = "Relation for Partner, product categories and commissions"
 
     _columns = {
-        'name' : fields.many2one('product.category', 'Category'),
-        'commission' : fields.float('Commission'),
-        'partner_id' : fields.many2one('res.partner', 'Partner'),
+        'name': fields.many2one('product.category', 'Category'),
+        'commission': fields.float('Commission'),
+        'partner_id': fields.many2one('res.partner', 'Partner'),
         }
 
 partner_product_commission()
