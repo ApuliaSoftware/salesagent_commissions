@@ -27,6 +27,8 @@
                             <field name="salesagent_parent_id" />
                             <field name="parent_commission" />
                         </group>
+                        <separator string="Sub Agents" colspan="4"/>
+                        <field name="salesagent_parent_ids" colspan="4" nolabel="1"/>
                         <separator string="Customers" colspan="4"/>
                         <field name="customer_for_salesagent_ids" colspan="4" nolabel="1"/>
                     </page>
