@@ -122,16 +122,19 @@ class account_invoice(osv.osv):
             store={
                 'account.invoice.line': (
                     _get_commission, [
-                        'product_id', 'price_unit', 'quantity', 'discount'],
+                        'product_id', 'price_unit', 'quantity', 'discount',
+                        'invoice_id'],
                     50),
                 }
             ),
         'parent_commission': fields.function(
-            _total_commission, string='Parent Commission', type='float', multi='tcom',
+            _total_commission, string='Parent Commission', type='float',
+            multi='tcom',
             store={
                 'account.invoice.line': (
                     _get_commission, [
-                        'product_id', 'price_unit', 'quantity', 'discount'],
+                        'product_id', 'price_unit', 'quantity', 'discount',
+                        'invoice_id'],
                     50),
                 }
             ),
