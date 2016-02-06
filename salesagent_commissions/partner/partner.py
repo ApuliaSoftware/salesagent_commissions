@@ -75,11 +75,12 @@ class res_partner(osv.osv):
         # ----- Relation with salesagent parent
         'salesagent_parent_id': fields.many2one(
             'res.partner', 'Salesagent parent',
-            domain="[('salesagent', '=', True)]"),
+            domain="[('salesagent', '=', True),"
+                   "('salesagent_parent_id', '=', False)]"),
         'parent_commission' : fields.float('Parent Commission %'),
         'salesagent_parent_ids': fields.one2many(
             'res.partner', 'salesagent_parent_id',
-            'Sub salesagents'),
+            'Sub salesagents', readonly=True),
     }
 
 res_partner()
