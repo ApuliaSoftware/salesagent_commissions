@@ -35,6 +35,7 @@ class SaleOrderLine(orm.Model):
             'invoice_type': 'out_invoice',
             'salesagent_id': line.order_id.partner_id.salesagent_for_customer_id.id,
             'partner_id': line.order_id.partner_id.id,
+            'commission_parent_percentage': line.order_id.partner_id.salesagent_for_customer_id.parent_commission,
         })
         return super(SaleOrderLine, self)._prepare_order_line_invoice_line(
             cr, uid, line, account_id=False, context=None)

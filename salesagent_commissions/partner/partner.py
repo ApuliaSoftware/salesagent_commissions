@@ -65,7 +65,7 @@ class res_partner(osv.osv):
         'salesagent_for_customer_id': fields.many2one(
             'res.partner', 'Salesagent'),
         # ----- General commission for salesagent
-        'commission' : fields.float('Commission %'),
+        'commission': fields.float('Commission %'),
         'product_provvigioni_ids': fields.one2many(
             'partner.product_commission', 'partner_id',
             'Commission for products'),
