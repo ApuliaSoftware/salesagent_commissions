@@ -180,6 +180,7 @@
                     <field name="date_invoice"/>
                     <field name="partner_id"/>
                     <field name="salesagent_parent_id"/>
+                    <field name="parent_commission" sum="Parent Commmissions"/>
                     <field name="salesagent_id"/>
                     <field name="commission" sum="Commmissions"/>
                     <field name="paid_commission" />

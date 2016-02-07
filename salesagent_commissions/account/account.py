@@ -189,9 +189,12 @@ class account_invoice_line(osv.osv):
                 else:
                     comm = sign * salesagent_common_obj.commission_calculate(
                         cr, uid, 'account.invoice.line', line.id, context)
-                    pcp = (
-                        line.commission_parent_percentage or
-                        context.get('commission_parent_percentage', 0.0))
+                    if comm > 0.0:  # on advance invoices should not be calculated
+                        pcp = (
+                            line.commission_parent_percentage or
+                            context.get('commission_parent_percentage', 0.0))
+                    else:
+                        pcp = 0.0
                     parent_comm = sign * (
                         line.price_subtotal * pcp
                     ) / 100
