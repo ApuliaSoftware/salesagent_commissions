@@ -105,7 +105,9 @@ class account_invoice(osv.osv):
             cr, uid, ids, type, partner_id, date_invoice, payment_term,
             partner_bank_id, company_id)
         res['value']['salesagent_id'] = partner.salesagent_for_customer_id.id
-        res['value']['salesagent_parent_id'] = partner.salesagent_for_customer_id.salesagent_parent_id.id
+        res['value']['salesagent_parent_id'] = (
+            partner.salesagent_for_customer_id.salesagent_parent_id and
+            partner.salesagent_for_customer_id.salesagent_parent_id.id or False)
         res['value']['commission_parent_percentage'] = partner.salesagent_for_customer_id.parent_commission
         return res
 
