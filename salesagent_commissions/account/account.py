@@ -108,7 +108,9 @@ class account_invoice(osv.osv):
         res['value']['salesagent_parent_id'] = (
             partner.salesagent_for_customer_id.salesagent_parent_id and
             partner.salesagent_for_customer_id.salesagent_parent_id.id or False)
-        res['value']['commission_parent_percentage'] = partner.salesagent_for_customer_id.parent_commission
+        res['value']['commission_parent_percentage'] = (
+            partner.salesagent_for_customer_id.salesagent_parent_id and
+            partner.salesagent_for_customer_id.parent_commission or 0.0)
         return res
 
     _columns = {
