@@ -236,7 +236,11 @@ class account_invoice_line(osv.osv):
         'commission_presence': fields.boolean('Commission Presence'),
         'commission_percentage': fields.function(
             _commission, method=True, string='Comm. Percentage', type='float',
-            store=False, multi='comm'),
+            store={'account.invoice.line': (
+                lambda self, cr, uid, ids, ctx={}: ids, [
+                    'product_id', 'price_unit', 'quantity', 'discount',
+                    'no_commission'], 10),
+            }, multi='comm'),
         'commission_parent_percentage': fields.related(
             'invoice_id', 'commission_parent_percentage', type='float',
             string='Comm. Parent Percentage'),
