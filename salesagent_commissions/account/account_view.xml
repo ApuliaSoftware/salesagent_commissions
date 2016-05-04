@@ -26,6 +26,9 @@
                             domain="[('state', '=', 'paid'),
                                      ('paid_commission', '=', False)]"/>
                 </filter>
+                <xpath expr="//filter[@string='Partner']" position="after">
+                    <filter string="Salesagent" icon="terp-partner" domain="[]" context="{'group_by':'salesagent_id'}"/>
+                </xpath>
             </field>
         </record>
 
